@@ -1,5 +1,7 @@
 package com.test.store.authentication.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +25,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     private final CustomUserDetailsService userDetailsService;
 
     public AuthServerConfig(
-        AuthenticationManager authenticationManager,
+        @Qualifier("authenticationManagerBean") AuthenticationManager authenticationManager,
         PasswordEncoder passwordEncoder,
         CustomUserDetailsService userDetailsService) {
         this.authenticationManager = authenticationManager;
@@ -34,6 +36,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer.allowFormAuthenticationForClients();
+        oauthServer.tokenKeyAccess("permitAll()");
         oauthServer.checkTokenAccess("permitAll()");
     }
 
